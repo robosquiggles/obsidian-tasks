@@ -4,6 +4,7 @@ import {
     MarkdownPostProcessorContext,
     MarkdownRenderChild,
     Plugin,
+    parseLinktext,
 } from 'obsidian';
 
 import { State } from './Cache';
@@ -118,11 +119,37 @@ class QueryRenderChild extends MarkdownRenderChild {
     }
 
     private async render({ tasks, state }: { tasks: Task[]; state: State }) {
+        tasks.map(async (task) => {
+            if (task.description.startsWith('![[')) {
+                const link = parseLinktext(task.description);
+                const subpath = link.subpath
+                    .replace('#^', '')
+                    .replace(']]', '');
+                if (link) {
+                    const file = this.app.metadataCache.getFirstLinkpathDest(
+                        link.path.replace('![[', ''),
+                        task.path,
+                    );
+                    const content =
+                        file && (await this.app.vault.read(file)).split('\n');
+                    const blocks =
+                        file &&
+                        this.app.metadataCache.getFileCache(file)?.blocks;
+                    const line = blocks && blocks[subpath]?.position.start.line;
+                    if (line) {
+                        task.description = content[line]
+                            .split(' ^')[0]
+                            .replace('- ', '');
+                    }
+                }
+            }
+        });
         const content = this.containerEl.createEl('div');
         if (state === State.Warm && this.query.error === undefined) {
             const { taskList, tasksCount } = await this.createTasksList({
                 tasks,
                 content,
+                app: this.app,
             });
             content.appendChild(taskList);
             if (!this.query.layoutOptions.hideTaskCount) {
@@ -136,7 +163,6 @@ class QueryRenderChild extends MarkdownRenderChild {
         } else {
             content.setText('Loading Tasks ...');
         }
-
         this.containerEl.firstChild?.replaceWith(content);
     }
 
@@ -146,6 +172,7 @@ class QueryRenderChild extends MarkdownRenderChild {
     }: {
         tasks: Task[];
         content: HTMLDivElement;
+        app: App;
     }): Promise<{ taskList: HTMLUListElement; tasksCount: number }> {
         this.query.filters.forEach((filter) => {
             tasks = tasks.filter(filter);
