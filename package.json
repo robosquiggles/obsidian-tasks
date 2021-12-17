@@ -21,6 +21,7 @@
   "license": "MIT",
   "devDependencies": {
     "@arkweid/lefthook": "^0.7.6",
+    "@codemirror/view": "^0.19.34",
     "@tsconfig/svelte": "^1.0.10",
     "@types/jest": "^26.0.22",
     "@types/node": "^16.11.6",
@@ -36,7 +37,7 @@
     "eslint-plugin-prettier": "^3.3.1",
     "jest": "^27.3.1",
     "moment": "^2.29.1",
-    "obsidian": "^0.12.17",
+    "obsidian": "^0.13.11",
     "prettier": "^2.2.1",
     "svelte": "^3.37.0",
     "svelte-check": "^1.5.2",
