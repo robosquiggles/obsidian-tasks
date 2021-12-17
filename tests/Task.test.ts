@@ -12,6 +12,7 @@ describe('parsing', () => {
         // Arrange
         const line = '- [x] this is a done task 🗓 2021-09-12 ✅ 2021-06-20';
         const path = 'this/is a path/to a/file.md';
+        const lineNumber = 1985;
         const sectionStart = 1337;
         const sectionIndex = 1209;
         const precedingHeader = 'Eloquent Section';
@@ -19,6 +20,7 @@ describe('parsing', () => {
         // Act
         const task = Task.fromLine({
             line,
+            lineNumber,
             path,
             sectionStart,
             sectionIndex,
@@ -51,6 +53,7 @@ describe('parsing', () => {
         const task = Task.fromLine({
             line,
             path,
+            lineNumber: 0,
             sectionStart,
             sectionIndex,
             precedingHeader,
@@ -83,6 +86,7 @@ describe('parsing', () => {
         const task = Task.fromLine({
             line,
             path,
+            lineNumber: 0,
             sectionStart,
             sectionIndex,
             precedingHeader,
@@ -113,6 +117,7 @@ describe('to string', () => {
         const task: Task = Task.fromLine({
             line,
             path: '',
+            lineNumber: 0,
             sectionStart: 0,
             sectionIndex: 0,
             precedingHeader: '',
@@ -132,6 +137,7 @@ describe('toggle', () => {
         const task: Task = Task.fromLine({
             line,
             path: '',
+            lineNumber: 0,
             sectionStart: 0,
             sectionIndex: 0,
             precedingHeader: '',
@@ -213,6 +219,7 @@ describe('toggle', () => {
                 line: `- [ ] I am task 🔁 ${recurrenceText} 📅 ${dueDate}`,
                 path: '',
                 precedingHeader: '',
+                lineNumber: 0,
                 sectionStart: 0,
                 sectionIndex: 0,
             });

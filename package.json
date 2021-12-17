@@ -21,7 +21,6 @@
   "license": "MIT",
   "devDependencies": {
     "@arkweid/lefthook": "^0.7.6",
-    "@codemirror/view": "^0.19.34",
     "@tsconfig/svelte": "^1.0.10",
     "@types/jest": "^26.0.22",
     "@types/node": "^16.11.6",

@@ -12,6 +12,7 @@ describe('Query', () => {
                     description: 'description',
                     path: 'Ab/C D',
                     indentation: '',
+                    lineNumber: 0,
                     sectionStart: 0,
                     sectionIndex: 0,
                     originalStatusCharacter: ' ',
@@ -29,6 +30,7 @@ describe('Query', () => {
                     description: 'description',
                     path: 'FF/C D',
                     indentation: '',
+                    lineNumber: 0,
                     sectionStart: 0,
                     sectionIndex: 0,
                     originalStatusCharacter: ' ',
@@ -63,6 +65,7 @@ describe('Query', () => {
             const tasks: Task[] = [
                 Task.fromLine({
                     line: '- [ ] #task this does not include the word; only in the global filter',
+                    lineNumber: 0,
                     sectionStart: 0,
                     sectionIndex: 0,
                     path: '',
@@ -70,6 +73,7 @@ describe('Query', () => {
                 }),
                 Task.fromLine({
                     line: '- [ ] #task this does: task',
+                    lineNumber: 0,
                     sectionStart: 0,
                     sectionIndex: 0,
                     path: '',
@@ -100,6 +104,7 @@ describe('Query', () => {
             const tasks: Task[] = [
                 Task.fromLine({
                     line: '- [ ] this does not include the word at all',
+                    lineNumber: 0,
                     sectionStart: 0,
                     sectionIndex: 0,
                     path: '',
@@ -107,6 +112,7 @@ describe('Query', () => {
                 }),
                 Task.fromLine({
                     line: '- [ ] #task this includes the word as a tag',
+                    lineNumber: 0,
                     sectionStart: 0,
                     sectionIndex: 0,
                     path: '',
@@ -114,6 +120,7 @@ describe('Query', () => {
                 }),
                 Task.fromLine({
                     line: '- [ ] #task this does: task',
+                    lineNumber: 0,
                     sectionStart: 0,
                     sectionIndex: 0,
                     path: '',

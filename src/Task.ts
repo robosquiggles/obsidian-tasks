@@ -25,6 +25,7 @@ export class Task {
     public readonly description: string;
     public readonly path: string;
     public readonly indentation: string;
+    public readonly lineNumber: number;
     /** Line number where the section starts that contains this task. */
     public readonly sectionStart: number;
     /** The index of the nth task in its section. */
@@ -66,6 +67,7 @@ export class Task {
         description,
         path,
         indentation,
+        lineNumber,
         sectionStart,
         sectionIndex,
         originalStatusCharacter,
@@ -82,6 +84,7 @@ export class Task {
         description: string;
         path: string;
         indentation: string;
+        lineNumber: number;
         sectionStart: number;
         sectionIndex: number;
         originalStatusCharacter: string;
@@ -98,6 +101,7 @@ export class Task {
         this.description = description;
         this.path = path;
         this.indentation = indentation;
+        this.lineNumber = lineNumber;
         this.sectionStart = sectionStart;
         this.sectionIndex = sectionIndex;
         this.originalStatusCharacter = originalStatusCharacter;
@@ -116,12 +120,14 @@ export class Task {
 
     public static fromLine({
         line,
+        lineNumber,
         path,
         sectionStart,
         sectionIndex,
         precedingHeader,
     }: {
         line: string;
+        lineNumber: number;
         path: string;
         sectionStart: number;
         sectionIndex: number;
@@ -258,6 +264,7 @@ export class Task {
             description,
             path,
             indentation,
+            lineNumber,
             sectionStart,
             sectionIndex,
             originalStatusCharacter: statusString,

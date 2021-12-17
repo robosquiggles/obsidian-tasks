@@ -1,53 +1,57 @@
-import {
-    EditorView,
-    PluginValue,
-    ViewPlugin,
-    ViewUpdate,
-} from '@codemirror/view';
+import { MarkdownView, Plugin, Vault, Workspace } from 'obsidian';
+import { toggleLine } from './Commands/ToggleDone';
 
-export const newLivePreviewRenderer = () => {
-    return ViewPlugin.fromClass(LivePreviewRenderer, {
-        eventHandlers: {
-            mousedown: (event) => {
-                console.log('MOUSEDOWN', event);
-            },
-            change: (event) => {
-                console.log('CHANGE', event);
-            },
-            click: (event) => {
-                console.log('CLICK', event);
-            },
-        },
-    });
-};
+export class LivePreviewRenderer {
+    private readonly plugin: Plugin;
+    private readonly vault: Vault;
+    private readonly workspace: Workspace;
 
-class LivePreviewRenderer implements PluginValue {
-    private readonly view: EditorView;
+    constructor({
+        plugin,
+        vault,
+        workspace,
+    }: {
+        plugin: Plugin;
+        vault: Vault;
+        workspace: Workspace;
+    }) {
+        this.plugin = plugin;
+        this.vault = vault;
+        this.workspace = workspace;
 
-    constructor(view: EditorView) {
-        this.view = view;
+        this.plugin.registerDomEvent(
+            document,
+            'click',
+            this.clickHandler.bind(this),
+        );
     }
 
-    public update(update: ViewUpdate): void {
-        if (!update.changes.empty) {
-            update.changes.iterChanges((fromA, toA, fromB, toB, inserted) => {
-                if (
-                    inserted.length === 1 &&
-                    (inserted.sliceString(0) === ' ' ||
-                        inserted.sliceString(0) === 'x')
-                ) {
-                    // This _could_ be a task that was clicked, as the change was
-                    // merely inserting an 'x' or a ' '.
-                    // I would now need to figure out whether there is actually
-                    // a task here and whether its state was actually toggled.
-                    console.log(
-                        'inserted',
-                        inserted,
-                        inserted.toJSON(),
-                        inserted.sliceString(0),
-                    );
-                }
-            });
+    private async clickHandler(event) {
+        // TODO: only listen on checkbox events.
+        try {
+            const activeView = this.workspace.getActiveViewOfType(MarkdownView);
+            if (!activeView) {
+                return false;
+            }
+            const path = activeView.file.path;
+            const eventOffset = (activeView.editor as any).cm.posAtDOM(
+                event.target,
+            );
+            const eventLineNumber =
+                activeView.editor.offsetToPos(eventOffset).line;
+            const line = activeView.editor.getLine(eventLineNumber);
+            const toggled = toggleLine({ line, path });
+            console.log('TOGL', toggled);
+            activeView.editor.setLine(eventLineNumber, toggled);
+
+            // TODO: need two clicks to toggl
+            // TODO: only stop propagation in case of task.
+            event.stopPropagation();
+        } catch {
+            console.log('outside doc clicked');
         }
+
+        // TODO: figure out if returning a bool makes a difference.
+        return true;
     }
 }

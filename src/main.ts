@@ -5,7 +5,7 @@ import { Commands } from './Commands';
 import { Events } from './Events';
 import { initializeFile } from './File';
 import { InlineRenderer } from './InlineRenderer';
-import { newLivePreviewRenderer } from './LivePreviewRenderer';
+import { LivePreviewRenderer } from './LivePreviewRenderer';
 import { QueryRenderer } from './QueryRenderer';
 import { getSettings, updateSettings } from './Settings';
 import { SettingsTab } from './SettingsTab';
@@ -14,6 +14,7 @@ export default class TasksPlugin extends Plugin {
     private cache: Cache | undefined;
     public inlineRenderer: InlineRenderer | undefined;
     public queryRenderer: QueryRenderer | undefined;
+    public livePreviewRenderer: LivePreviewRenderer | undefined;
 
     async onload() {
         console.log('loading plugin "tasks"');
@@ -34,8 +35,12 @@ export default class TasksPlugin extends Plugin {
         });
         this.inlineRenderer = new InlineRenderer({ plugin: this });
         this.queryRenderer = new QueryRenderer({ plugin: this, events });
+        this.livePreviewRenderer = new LivePreviewRenderer({
+            plugin: this,
+            vault: this.app.vault,
+            workspace: this.app.workspace,
+        });
 
-        this.registerEditorExtension(newLivePreviewRenderer());
         new Commands({ plugin: this });
     }
 

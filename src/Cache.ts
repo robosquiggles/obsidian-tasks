@@ -251,6 +251,7 @@ export class Cache {
                 const line = fileLines[listItem.position.start.line];
                 const task = Task.fromLine({
                     line,
+                    lineNumber: listItem.position.start.line,
                     path: file.path,
                     sectionStart: currentSection.position.start.line,
                     sectionIndex,

@@ -13,6 +13,7 @@ function fromLine({ line, path = '' }: { line: string; path?: string }) {
         line,
         path,
         precedingHeader: '',
+        lineNumber: 0,
         sectionIndex: 0,
         sectionStart: 0,
     })!;
